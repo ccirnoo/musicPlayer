@@ -1,0 +1,244 @@
+#app-music {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: url(../images/bg.jpg);
+  background-size: 100% 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  --themeColor: #e0002e;
+}
+#app-music .hidden {
+  display: none;
+}
+@keyframes running {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+#app-music #app-music-box {
+  border-radius: 10px;
+  width: 800px;
+  height: 600px;
+}
+#app-music #app-music-box .search-bar {
+  display: flex;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  justify-content: space-between;
+  height: 60px;
+  align-items: center;
+  background-color: var(--themeColor);
+  padding: 20px;
+}
+#app-music #app-music-box .search-bar .search-bar-left {
+  color: white;
+  font-weight: 300;
+}
+#app-music #app-music-box .search-bar .search-bar-input input {
+  width: 300px;
+  height: 30px;
+  border: 0px;
+  border-radius: 20px;
+  text-indent: 15px;
+  background: url(../images/zoom.png) 270px center no-repeat white;
+}
+#app-music #app-music-box .search-bar .search-bar-input input:focus {
+  outline: none;
+}
+#app-music #app-music-box .app-music-content {
+  height: 480px;
+  width: 800px;
+  display: flex;
+}
+#app-music #app-music-box .app-music-content .app-music-content-left {
+  height: 100%;
+  width: 200px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+#app-music #app-music-box .app-music-content .app-music-content-left ul {
+  height: 100%;
+  Overflow: Hidden;
+  Overflow-y: scroll;
+}
+#app-music #app-music-box .app-music-content .app-music-content-left ul li {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  color: black;
+}
+#app-music #app-music-box .app-music-content .app-music-content-left ul li .play-mv {
+  background: url(../images/table.png) 100px no-repeat;
+  width: 30px;
+  height: 20px;
+  background-position: 3px -46px;
+  cursor: pointer;
+}
+#app-music #app-music-box .app-music-content .app-music-content-left ul li img {
+  cursor: pointer;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 20px;
+  height: 20px;
+}
+#app-music #app-music-box .app-music-content .app-music-content-left ul li span {
+  width: 130px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#app-music #app-music-box .app-music-content .app-music-content-left ul li:nth-child(2n-1) {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle {
+  height: 100%;
+  width: 400px;
+  border-right: 1px solid rgba(236, 14, 14, 0.1);
+  background-color: rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .detail {
+  display: flex;
+  justify-content: space-around;
+  position: absolute;
+  width: 400px;
+  bottom: 50px;
+  left: 0px;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .detail .detail-left {
+  font-weight: bold;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .detail .detail-left span {
+  font-weight: normal;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .detail .detail-right {
+  font-weight: bold;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .detail .detail-right span {
+  font-weight: normal;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .disc {
+  position: absolute;
+  top: 110px;
+  left: 70px;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .bar {
+  position: absolute;
+  left: 150px;
+  top: 20px;
+  transform: rotate(-25deg);
+  transform-origin: 12px 12px;
+  transition: all 2s;
+  z-index: 1;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .cover {
+  width: 150px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .autorotate {
+  animation-name: running;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+#app-music #app-music-box .app-music-content .app-music-content-middle .playing {
+  transform: rotate(0) !important;
+}
+#app-music #app-music-box .app-music-content .app-music-content-right {
+  height: 100%;
+  width: 200px;
+  background-color: rgba(255, 255, 255, 0.5);
+  color: black;
+  Overflow: Hidden;
+  Overflow-y: scroll;
+}
+#app-music #app-music-box .app-music-content .app-music-content-right h4 {
+  margin: 5px;
+  text-align: center;
+  color: black;
+}
+#app-music #app-music-box .app-music-content .app-music-content-right li {
+  display: flex;
+  margin-bottom: 5px;
+}
+#app-music #app-music-box .app-music-content .app-music-content-right li .nickname {
+  color: black;
+}
+#app-music #app-music-box .app-music-content .app-music-content-right li .content {
+  font-size: 12px;
+  font-weight: lighter;
+}
+#app-music #app-music-box .app-music-content .app-music-content-right li img {
+  width: 30px;
+  border-radius: 50%;
+  margin: 8px;
+}
+#app-music #app-music-box .app-music-footer {
+  height: 60px;
+  width: 800px;
+  background-color: #f1f3f4;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+#app-music #app-music-box .app-music-footer audio {
+  height: 100%;
+  width: 100%;
+}
+#app-music #app-music-box .app-music-footer audio:focus {
+  outline: none;
+}
+#app-music #app-music-box .app-music-footer div {
+  z-index: 2;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+}
+#app-music #app-music-box .app-music-footer div .video-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  width: 100vw;
+  height: 100vh;
+}
+#app-music #app-music-box .app-music-footer div .video-close {
+  z-index: 9;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  font-size: 20px;
+}
+#app-music #app-music-box .app-music-footer div video {
+  z-index: 999;
+  background-color: #fff;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: 75%;
+}
+#app-music #app-music-box .loading {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  z-index: 2000;
+}
+#app-music #app-music-box .loading img {
+  transform: translate(-50%, -50%);
+  position: fixed;
+  z-index: 3000;
+  width: 200px;
+  height: 200px;
+  left: 50%;
+  top: 50%;
+}

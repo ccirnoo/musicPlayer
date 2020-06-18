@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>音乐盒</title>
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        ul,
+        li {
+            list-style: none;
+        }
+    </style>
+    <link rel="stylesheet" href="./css/music.css">
+</head>
+
+<body>
+    <div id="app-music">
+        <div id="app-music-box">
+            <!-- 搜索栏开始 -->
+            <div class="search-bar">
+                <div class="search-bar-left">音乐盒</div>
+                <div class="search-bar-input">
+                    <input type="text" value="热门" v-model="keywords" @keyup.enter.stop="searchSongs">
+                </div>
+            </div>
+            <!-- 搜索栏结束 -->
+            <!-- 中间音乐盒内容开始 -->
+            <div class="app-music-content">
+                <div class="app-music-content-left">
+                    <ul>
+                        <li v-for="item,index in songs">
+                            <img src="./images/play.png" @click="playAudio(item.id,index)">
+                            <span class="songName">{{item.name}}</span>
+                            <div :class="['play-mv',{hidden:item.mvid==0}]" @click="playVideo(item.mvid)"></div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="app-music-content-middle">
+                    <img src="./images/player_bar.png" :class="['bar',{playing:isAudioPlaying}]">
+                    <img :src="coverUrl" class="cover">
+                    <img src="./images/disc.png" :class="['disc',{autorotate:isAudioPlaying}]">
+                    <div class="detail">
+                        <div class="detail-left">
+                            歌手: <span>{{singer}}</span>
+                        </div>
+                        <div class="detail-right">
+                            专辑: <span>{{album}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="app-music-content-right">
+                    <ul>
+                        <h4>热门留言</h4>
+                        <li v-for="item,index in hotComments">
+                            <div class="left">
+                                <img :src="item.user.avatarUrl">
+                            </div>
+                            <div class="right">
+                                <p class="nickname">{{item.user.nickname}}</p>
+                                <span class="content">{{item.content}}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- 中间音乐盒内容结束 -->
+            <!-- 底部播放器开始 -->
+            <div class="app-music-footer">
+                <audio ref="audio" @pause="audioPause" @play="audioPlay" :src="musicUrl" controls autoplay loop></audio>
+                <div :class="['video-box',{hidden:!isVideoPlaying}]">
+                    <button class="video-close" @click="closeVideo">返回</button>
+                    <video ref="video" :src="videoUrl" controls autoplay loop></video>
+                    <div class="video-mask"></div>
+                </div>
+            </div>
+            <!-- 底部播放器结束 -->
+            <div :class="['loading',{hidden:!isLoading}]">
+                <img src="./images/loading.gif">
+            </div>
+        </div>
+    </div>
+</body>
+<!-- 1. 引入依赖库 -->
+<script src="./node_modules/vue/dist/vue.js"></script>
+<script src="./node_modules/axios/dist/axios.js"></script>
+<script src="./js/common.js"></script>
+<script>
+    let vm = new Vue({
+        el: "#app-music",
+        data: {
+            songs: [],
+            keywords: '热门',
+            musicUrl: '',
+            videoUrl: '',
+            coverUrl: '',
+            hotComments: '',
+            singer: '',
+            album: '',
+            isVideoPlaying: false,
+            isAudioPlaying: false,
+            isLoading: false
+        },
+        methods: {
+            audioPause: function () {
+                this.isAudioPlaying = false;
+            },
+            audioPlay: function () {
+                this.isAudioPlaying = true;
+            },
+            playAudio: function (id,index) {
+                this.isAudioPlaying = true;
+                Axios.get("/song/url", {
+                    params: { id: id }
+                }).then((res) => {
+                    this.musicUrl = res.data[0].url;
+                });
+                Axios.get("/song/detail", {
+                    params: { ids: id }
+                }).then((res) => {
+                    this.coverUrl = res.songs[0].al.picUrl;
+                });
+                Axios.get("/comment/hot?type=0", {
+                    params: { id: id }
+                }).then((res) => {
+                    this.hotComments = res.hotComments;
+                });
+                this.singer = this.songs[index].artists[0].name
+                this.album = this.songs[index].album.name
+            },
+            playVideo: function (id) {
+                this.$refs.audio.pause();
+                this.isAudioPlaying = false;
+                this.isVideoPlaying = true;
+                Axios.get("/mv/url", {
+                    params: { id: id }
+                }).then((res) => {
+                    this.videoUrl = res.data.url;
+                })
+                
+            },
+            searchSongs: function () {
+                Axios.get("/search", {
+                    params: { keywords: this.keywords }
+                }).then((res) => {
+                    this.songs = res.result.songs;
+                })
+            },
+            closeVideo: function () {
+                this.isVideoPlaying = false
+                this.$refs.video.pause();
+            }
+        },
+        mounted() {
+            Axios.get("/search", {
+                params: { keywords: this.keywords }
+            }).then((res) => {
+                this.songs = res.result.songs;
+                this.album = this.songs[1].album.name
+                this.singer = this.songs[1].artists[0].name
+                let id = this.songs[1].id;
+                Axios.get("/song/url", {
+                    params: { id: id }
+                }).then((res) => {
+                    this.musicUrl = res.data[0].url;
+                });
+                Axios.get("/song/detail", {
+                    params: { ids: id }
+                }).then((res) => {
+                    this.coverUrl = res.songs[0].al.picUrl;
+                });
+                // 获取热门评论内容
+                Axios.get("/comment/hot?type=0", {
+                    params: { id: id }
+                }).then((res) => {
+                    this.hotComments = res.hotComments;
+                });
+            })
+        },
+    })
+</script>
+
+</html>
